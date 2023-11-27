@@ -168,9 +168,8 @@ class Minge:
         self.x_vel *= -1
 
 
-def desen(win, palete, minge, scor_stanga, scor_dreapta, color_scheme):
-    # Choose colors based on the selected color scheme
-    background_color, paddle_color, ball_color, line_color = get_color(color_scheme)
+def desen(win, palete, minge, scor_stanga, scor_dreapta, cul):
+    background_color, paddle_color, ball_color, line_color = get_color(cul)
 
     win.fill(background_color)
 
@@ -275,12 +274,12 @@ def select_difficulty():
 
     return selected_difficulty
 
-def get_color(color_scheme):
-    if color_scheme == "Pachetul 1":
+def get_color(cul):
+    if cul == "Pachetul 1":
         return NEGRU, ALB, ALB, ALBASTRU
-    elif color_scheme == "Pachetul 2":
+    elif cul == "Pachetul 2":
         return (169, 169, 169), (0, 128, 0), (0, 128, 0), (0, 128, 0)
-    elif color_scheme == "Pachetul 3":
+    elif cul == "Pachetul 3":
         return (255, 182, 193), (255, 255, 0), (255, 255, 0), (255, 255, 0)
     else:
         return NEGRU, ALB, ALB, ALBASTRU
@@ -323,7 +322,7 @@ def select_culoare():
     font_large = pygame.font.SysFont("arial.ttf", 40)
     font_small = pygame.font.SysFont("arial.ttf", 30)
     color_options = ["Pachetul 1", "Pachetul 2", "Pachetul 3", "Back"]
-    selected_color_scheme = None
+    culoare_selectata = None
 
     while run:
         clock.tick(FPS)
@@ -333,7 +332,7 @@ def select_culoare():
         WIN.blit(message, (LATIME // 2 - message.get_width() // 2, INALTIME // 8))
 
         for i, option in enumerate(color_options):
-            text = font_small.render(option, 1, ALBASTRU if selected_color_scheme == option else ALB)
+            text = font_small.render(option, 1, ALBASTRU if culoare_selectata == option else ALB)
             WIN.blit(text, (LATIME // 2 - text.get_width() // 2, INALTIME // 2 - len(color_options) * text.get_height() // 2 + i * 60))
 
         pygame.display.update()
@@ -344,20 +343,20 @@ def select_culoare():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
-                    run = False  # Exit the color selection loop
+                    run = False
                 elif event.key == pygame.K_UP:
-                    selected_color_scheme = color_options[0] if selected_color_scheme is None else color_options[(color_options.index(selected_color_scheme) - 1) % len(color_options)]
+                    culoare_selectata = color_options[0] if culoare_selectata is None else color_options[(color_options.index(culoare_selectata) - 1) % len(color_options)]
                 elif event.key == pygame.K_DOWN:
-                    selected_color_scheme = color_options[0] if selected_color_scheme is None else color_options[(color_options.index(selected_color_scheme) + 1) % len(color_options)]
+                    culoare_selectata = color_options[0] if culoare_selectata is None else color_options[(color_options.index(culoare_selectata) + 1) % len(color_options)]
 
-    return selected_color_scheme
+    return culoare_selectata
     
 def main():
     pagina_start()
 
     while True:
-        color_scheme = select_culoare()
-        if color_scheme == "Back":
+        cul = select_culoare()
+        if cul == "Back":
             pagina_start()
         else:
             break
@@ -380,7 +379,7 @@ def main():
     scor_dreapta = 0
     while run:
         clock.tick(FPS)
-        desen(WIN, [paleta_stanga, paleta_dreapta], minge,scor_stanga, scor_dreapta, color_scheme)
+        desen(WIN, [paleta_stanga, paleta_dreapta], minge,scor_stanga, scor_dreapta, cul)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
